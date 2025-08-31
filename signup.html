@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="auth.css">
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+
+<div class="auth-container">
+    <h2>Create Account</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button id="signupBtn">Sign Up</button>
+    <p>Already have an account? <a href="login.html">Login</a></p>
+    <img src="assets/sun.png"  id="logo">
+    <h3 id="logo-txt">MindBloom</h3>
+</div>
+
+<script type="module">
+import { auth, db , doc, setDoc } from "./firebase.js";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+
+document.getElementById("signupBtn").addEventListener("click", async () => {
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!username || !email || !password) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    try {
+        // Create user with email/password
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCred.user;
+
+        // Store username in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+            username: username,
+            email: email,
+            pfp: "😊" // default profile picture
+        });
+
+        // Send email verification
+        await sendEmailVerification(user);
+
+        alert(`Account created successfully! A verification email has been sent to ${email}(spam). Please verify your email before logging in.`);
+        window.location.href = "login.html";
+
+    } catch (error) {
+        // Better alert handling
+        if (error.code === "auth/email-already-in-use") {
+            alert("This email is already registered. Try logging in.");
+        } else if (error.code === "auth/invalid-email") {
+            alert("Please enter a valid email address.");
+        } else if (error.code === "auth/weak-password") {
+            alert("Password should be at least 6 characters.");
+        } else {
+            alert(error.message);
+        }
+    }
+});
+</script>
+
+</body>
+</html>

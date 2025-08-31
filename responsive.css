@@ -1,0 +1,74 @@
+/* ✅ Universal Responsive CSS */
+@media (max-width: 1024px) {
+    /* Sidebar stacks above */
+    .sidebar {
+        width: 100%;
+        position: relative;
+        height: auto;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* Main container stacks below */
+    .container, .content, .main {
+        width: 100%;
+        margin: 0;
+        padding: 10px;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* Disable hover grow/shrink effects */
+    .sidebar:hover,
+    .container:hover,
+    .btn:hover,
+    button:hover,
+    input[type="button"]:hover,
+    input[type="submit"]:hover {
+        transform: none !important;
+    }
+
+    /* Buttons stack vertically */
+    .btn, button, input[type="button"], input[type="submit"] {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* Flex rows become columns */
+    .row, .flex, .controls, .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+
+    /* Headings and text resize */
+    h1, h2, h3, h4, h5, h6 {
+        font-size: 1.2em;
+        text-align: center;
+    }
+
+    p, span, label, input, textarea, select {
+        font-size: 0.95em;
+    }
+
+    /* Images and media fit screen */
+    img, video, iframe {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Calendar or grid items stack */
+    .calendar, .grid, .cards {
+        display: block;
+        width: 100%;
+    }
+
+    .calendar .day, .grid-item, .card {
+        width: 100% !important;
+        margin-bottom: 10px;
+    }
+}
