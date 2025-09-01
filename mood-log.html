@@ -608,10 +608,7 @@ modalLogout.addEventListener("click", () => {
   auth.signOut().then(() => window.location.href = "login.html");
 });
 
-// ====== SIDEBAR ACTIVE LINK ======
-document.querySelectorAll('.sidebar a').forEach(link => {
-  if (link.href === window.location.href) link.classList.add('active');
-});
+
 
 // ====== MOOD LOGIC ======
 const moodDescriptions = {

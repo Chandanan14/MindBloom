@@ -371,15 +371,7 @@ import { db, auth,collection, addDoc, getDoc, getDocs, doc, updateDoc, serverTim
 
 
      
-     //page active
-    const sidebarLinks = document.querySelectorAll('.sidebar a');
-
-    sidebarLinks.forEach(link =>{
-        if(link.href === window.location.href){
-            link.classList.add('active');
-        }
-    });
-
+    
 
 
     function updateClock() {

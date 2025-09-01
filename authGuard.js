@@ -14,10 +14,12 @@ export function protectPage(redirectTo = "login.html") {
 
 
 /* ===== Sidebar Active Link ===== */
-const sidebarLinks = document.querySelectorAll('.sidebar a');
-sidebarLinks.forEach(link => {
-    if (link.href === window.location.href) {
-        link.classList.add('active');
-    }
+const currentPath = window.location.pathname.split("/").pop(); // e.g., "index.html"
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+  const linkPath = link.getAttribute("href").split("/").pop();
+  if (linkPath === currentPath || (linkPath === "index.html" && currentPath === "")) {
+    link.classList.add("active");
+  }
 });
 
