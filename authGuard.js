@@ -10,3 +10,14 @@ export function protectPage(redirectTo = "login.html") {
         }
     });
 }
+
+
+
+/* ===== Sidebar Active Link ===== */
+const sidebarLinks = document.querySelectorAll('.sidebar a');
+sidebarLinks.forEach(link => {
+    if (link.href === window.location.href) {
+        link.classList.add('active');
+    }
+});
+
