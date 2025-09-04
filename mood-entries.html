@@ -239,6 +239,15 @@ protectPage();
 import { db, auth, collection, getDocs } from "./firebase.js";
 import { doc, getDoc } from "./firebase.js";
 
+/* ===== Sidebar Active Link ===== */
+const currentPath = window.location.pathname.split("/").pop(); // e.g., "index.html"
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+  const linkPath = link.getAttribute("href").split("/").pop();
+  if (linkPath === currentPath || (linkPath === "index.html" && currentPath === "")) {
+    link.classList.add("active");
+  }
+});
 
 
 

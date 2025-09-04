@@ -206,6 +206,17 @@ onAuthStateChanged(auth, (user) => {
 });
 
 
+/* ===== Sidebar Active Link ===== */
+const currentPath = window.location.pathname.split("/").pop(); // e.g., "index.html"
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+  const linkPath = link.getAttribute("href").split("/").pop();
+  if (linkPath === currentPath || (linkPath === "index.html" && currentPath === "")) {
+    link.classList.add("active");
+  }
+});
+
+
 const container   = document.getElementById("entriesContainer");
 const searchInput = document.getElementById("searchInput");
 const filterDate  = document.getElementById("filterDate");

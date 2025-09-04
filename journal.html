@@ -363,7 +363,16 @@ import { db, auth,collection, addDoc, getDoc, getDocs, doc, updateDoc, serverTim
 
 
 
-    
+    /* ===== Sidebar Active Link ===== */
+const currentPath = window.location.pathname.split("/").pop(); // e.g., "index.html"
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+  const linkPath = link.getAttribute("href").split("/").pop();
+  if (linkPath === currentPath || (linkPath === "index.html" && currentPath === "")) {
+    link.classList.add("active");
+  }
+});
+
 
 
     function updateClock() {
