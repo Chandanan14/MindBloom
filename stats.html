@@ -302,6 +302,35 @@ protectPage();
 <script type="module">
 import { auth, db, collection, doc, getDoc, getDocs, query, where } from "./firebase.js";
 
+
+// ====== SETTINGS MODAL ======
+const settingsLink = document.getElementById("settingsLink");
+const settingsModal = document.getElementById("settingsModal");
+const closeBtn = settingsModal.querySelector(".close-btn");
+const modalUsername = document.getElementById("modal-username");
+const modalEmail = document.getElementById("modal-email");
+const modalLogout = document.getElementById("modal-logout");
+const currentPfp = document.getElementById("current-pfp");
+const pfpOptions = document.querySelectorAll(".pfp-option");
+const pfpChooser = document.getElementById("pfp-chooser");
+const changePfpBtn = document.getElementById("change-pfp-btn");
+const greeting = document.querySelector(".greeting");
+
+// Open/close modal
+settingsLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  settingsModal.style.display = "flex";
+});
+closeBtn.addEventListener("click", () => settingsModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === settingsModal) settingsModal.style.display = "none"; });
+
+// Logout
+modalLogout.addEventListener("click", () => {
+  auth.signOut().then(() => window.location.href = "login.html");
+});
+
+
+
 // Elements
 const totalMoodEl = document.getElementById("totalMood");
 const totalJournalEl = document.getElementById("totalJournal");

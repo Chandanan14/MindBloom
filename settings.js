@@ -1,123 +1,91 @@
-// settings.js
-import { db, auth, doc, getDoc, updateDoc } from "/FB_added/firebase.js";
+import { db, auth, collection, getDocs, doc, getDoc, query, where, updateDoc } from "./firebase.js";
 
-console.log("✅ settings.js loaded on", window.location.pathname);
-
-// Only proceed if settingsLink exists
 const settingsLink = document.getElementById("settingsLink");
-if (settingsLink) {
+const settingsModal = document.getElementById("settingsModal");
+const closeBtn = settingsModal.querySelector(".close-btn");
+const modalUsername = document.getElementById("modal-username");
+const modalEmail = document.getElementById("modal-email");
+const modalLogout = document.getElementById("modal-logout");
+const currentPfp = document.getElementById("current-pfp");
+const pfpOptions = document.querySelectorAll(".pfp-option");
+const pfpChooser = document.getElementById("pfp-chooser");
+const changePfpBtn = document.getElementById("change-pfp-btn");
 
-  const settingsModal = document.getElementById("settingsModal");
-  const closeBtn = settingsModal?.querySelector(".close-btn");
-  const modalUsername = document.getElementById("modal-username");
-  const modalEmail = document.getElementById("modal-email");
-  const modalLogout = document.getElementById("modal-logout");
-  const currentPfp = document.getElementById("current-pfp");
-  const pfpOptions = document.querySelectorAll(".pfp-option");
-  const pfpChooser = document.getElementById("pfp-chooser");
-  const changePfpBtn = document.getElementById("change-pfp-btn");
+// Open modal
+settingsLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  settingsModal.style.display = "flex";
+});
 
-  document.addEventListener("DOMContentLoaded", () => {
+// Close modal
+closeBtn.addEventListener("click", () => settingsModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === settingsModal) settingsModal.style.display = "none"; });
 
-    // -----------------
-    // Modal open/close
-    // -----------------
-    settingsLink.addEventListener("click", (e) => {
-      e.preventDefault();
-      settingsModal.style.display = "flex";
-    });
+// Logout
+modalLogout.addEventListener("click", () => {
+  auth.signOut().then(() => window.location.href = "login.html");
+});
 
-    closeBtn?.addEventListener("click", () => settingsModal.style.display = "none");
-    window.addEventListener("click", (e) => {
-      if (e.target === settingsModal) settingsModal.style.display = "none";
-    });
+// Auth & user data
+auth.onAuthStateChanged(async (user) => {
+  if (!user) { window.location.href = "login.html"; return; }
 
-    // -----------------
-    // Logout
-    // -----------------
-    modalLogout?.addEventListener("click", () => {
-      auth.signOut().then(() => window.location.href = "login.html");
-    });
+  const userDocRef = doc(db, "users", user.uid);
+  const userDocSnap = await getDoc(userDocRef);
 
-    // -----------------
-    // Auth & user data
-    // -----------------
-    auth.onAuthStateChanged(async (user) => {
-      if (!user) {
-        window.location.href = "login.html";
-        return;
-      }
+  let username = user.email.split("@")[0];
+  let pfp = "😊";
 
-      if (modalUsername && modalEmail && currentPfp) {
+  if (userDocSnap.exists()) {
+    const data = userDocSnap.data();
+    username = data.username || username;
+    pfp = data.pfp || "😊";
+  }
+
+  modalUsername.textContent = username;
+  modalEmail.textContent = user.email;
+  currentPfp.textContent = pfp;
+  greeting.innerHTML = `${pfp} Hello, <span id="name">${username}</span> 👋, hope you’re feeling okay today.`;
+
+  if (!userDocSnap.exists() || !userDocSnap.data().pfp) {
+    pfpChooser.style.display = "block";
+    changePfpBtn.style.display = "none";
+  } else {
+    pfpChooser.style.display = "none";
+    changePfpBtn.style.display = "block";
+  }
+});
+
+// PFP selection
+pfpOptions.forEach(option => {
+  option.addEventListener("click", async () => {
+    const selectedPfp = option.textContent;
+
+    // Update UI
+    currentPfp.textContent = selectedPfp;
+    greeting.innerHTML = `${selectedPfp} Hello, <span id="name">${modalUsername.textContent}</span> 👋, hope you’re feeling okay today.`;
+
+    // Save to Firestore
+    try {
+      const user = auth.currentUser;
+      if (user) {
         const userDocRef = doc(db, "users", user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-
-        let username = user.email.split("@")[0];
-        let pfp = "😊";
-
-        if (userDocSnap.exists()) {
-          const data = userDocSnap.data();
-          username = data.username || username;
-          pfp = data.pfp || "😊";
-        }
-
-        modalUsername.textContent = username;
-        modalEmail.textContent = user.email;
-        currentPfp.textContent = pfp;
-
-        // Show or hide PFP chooser / change button
-        if (!userDocSnap.exists() || !userDocSnap.data().pfp) {
-            if (pfpChooser) pfpChooser.style.display = "none";
-            if (changePfpBtn) changePfpBtn.style.display = "block";
-
-          
-        } else {
-            if (pfpChooser) pfpChooser.style.display = "none";
-            if (changePfpBtn) changePfpBtn.style.display = "block";
-
-        }
+        await updateDoc(userDocRef, { pfp: selectedPfp });
       }
-    });
-
-    // -----------------
-    // PFP selection
-    // -----------------
-    if (pfpOptions && currentPfp) {
-      pfpOptions.forEach(option => {
-        option.addEventListener("click", async () => {
-          const selectedPfp = option.textContent;
-
-          // Update UI
-          currentPfp.textContent = selectedPfp;
-
-          // Save to Firestore
-          try {
-            const user = auth.currentUser;
-            if (user) {
-              const userDocRef = doc(db, "users", user.uid);
-              await updateDoc(userDocRef, { pfp: selectedPfp });
-            }
-          } catch (err) {
-            console.error("Error saving PFP:", err);
-          }
-
-          // Hide chooser & show change button
-          if (pfpChooser) pfpChooser.style.display = "none";
-          if (changePfpBtn) changePfpBtn.style.display = "block";
-          
-        });
-      });
+    } catch (err) {
+      console.error("Error saving PFP:", err);
     }
 
-    // -----------------
-    // Change PFP button
-    // -----------------
-    if (changePfpBtn && pfpChooser) {
-      changePfpBtn.addEventListener("click", () => {
-        pfpChooser.style.display = "block";
-        changePfpBtn.style.display = "none";
-      });
-    }
+    // Hide chooser & show change button
+    pfpChooser.style.display = "none";
+    changePfpBtn.style.display = "block";
+  });
+});
 
-  }); // DOMContentLoaded end
-} // settingsLink check end
+// Change PFP button
+changePfpBtn.addEventListener("click", () => {
+  pfpChooser.style.display = "block";
+  changePfpBtn.style.display = "none";
+});
+
+
