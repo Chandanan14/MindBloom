@@ -1,0 +1,179 @@
+:root {
+  --soft-blue: #cde6fe;         /* Calmness, trust */
+  --soft-green: #b7fdb7;        /* Restoration, peace */
+  --lavender: #E6E6FA;          /* Relaxation, sleep */
+  --soft-pink: #ffd4ee;         /* Emotional safety */
+  --white: #FFFFFF;             /* Clarity, openness */
+  --earth-tone: #D8CAB8;        /* Grounding */
+}
+
+
+body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--soft-blue);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+     background-image: url('assets/background.jpeg'); 
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  
+}
+
+.auth-container {
+    background: #fff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 400px;
+    text-align: center;
+    box-shadow: 4px 6px 8px 0px rgba(0,0,0,0.78)
+;
+}
+
+.auth-container h2 {
+    color: rgb(222, 83, 227);
+    margin-bottom: 20px;
+    margin-top: 0;
+}
+
+.auth-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+}
+
+.auth-container input:focus {
+    border-color: #d18beb;
+    box-shadow: 0 0 5px rgba(255, 77, 216, 0.5);
+}
+
+.auth-container button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px;
+    background: #d275f4;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+.auth-container button:hover {
+    background: #9626c0;
+}
+
+.auth-container p {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.auth-container a {
+    color: #a404de;
+    text-decoration: none;
+}
+
+
+#logo{
+    margin: 30px;
+    margin-bottom: 0;
+    width: 80px;
+    border-radius: 100px;
+    
+}
+
+#logo-txt{
+    color: #9626c0;
+    font-family: cursive;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+/* ===== MOBILE ===== */
+@media (max-width: 600px) {
+    .auth-container {
+        width: 90%;
+        padding: 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .auth-container h2 {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .auth-container input,
+    .auth-container button {
+        width: 100%;
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .auth-container p {
+        font-size: 0.8rem;
+        text-align: center;
+    }
+}
+
+/* ===== TABLET ===== */
+@media (min-width: 601px) and (max-width: 1024px) {
+    .auth-container {
+        width: 70%;
+        padding: 25px;
+        font-size: 1rem;
+    }
+
+    .auth-container h2 {
+        font-size: 1.8rem;
+    }
+
+    .auth-container input,
+    .auth-container button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .auth-container p {
+        font-size: 0.9rem;
+    }
+}
+
+/* ===== DESKTOP ===== */
+@media (min-width: 1025px) {
+    .auth-container {
+        width: 400px;
+        padding: 30px;
+        font-size: 1rem;
+    }
+
+    .auth-container h2 {
+        font-size: 2rem;
+    }
+
+    .auth-container input,
+    .auth-container button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 12px;
+    }
+
+    .auth-container p {
+        font-size: 1rem;
+    }
+}

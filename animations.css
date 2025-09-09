@@ -1,0 +1,26 @@
+/* =========================
+   Global Animations
+   ========================= */
+
+/* Fade in entire page on load */
+body {
+  opacity: 0;
+  animation: fadeInPage 0.8s ease forwards;
+}
+
+@keyframes fadeInPage {
+  to { opacity: 1; }
+}
+
+
+/* Scroll reveal effect */
+.anim-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.anim-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+

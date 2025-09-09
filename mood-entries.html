@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mood Entries</title>
+  <link rel="stylesheet" href="animations.css">
+  <script src="animations.js"></script>
+  <link rel="stylesheet" href="responsive.css">
+   <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+   
+
+  <style>
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@500;700&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif; /* for main readable text */
+}
+
+
+
+
+    :root {
+  --soft-blue: #cde6fe;         /* Calmness, trust */
+  --soft-green: #b7fdb7;        /* Restoration, peace */
+  --lavender: #E6E6FA;          /* Relaxation, sleep */
+  --soft-pink: #ffd4ee;         /* Emotional safety */
+  --white: #FFFFFF;             /* Clarity, openness */
+  --earth-tone: #D8CAB8;        /* Grounding */
+}
+
+
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #edf5fd;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      color: #2424fe;
+      margin-top: 20px;
+    }
+
+    .calendar-container {
+      width: 90%;
+      margin: 20px auto;
+      background-color: var(--soft-blue);
+      padding: 15px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .calendar-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .calendar-content {
+      width: 100%;
+    }
+
+    .arrow-btn {
+      font-size: 30px;
+      background-color: #5daffb;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .arrow-btn.left {
+      margin-right: 10px;
+    }
+
+    .arrow-btn.right {
+      margin-left: 10px;
+    }
+
+    .arrow-btn:hover{
+       transform:  scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+  background-color: #3e9df5;
+    }
+
+    #month-year {
+      text-align: center;
+      font-size: 18px;
+      color: #5c5cfc;
+      margin-bottom: 10px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+    }
+
+    .calendar-cell {
+      background-color: #fff;
+      border-radius: 12px;
+      height: 80px;
+      padding: 3px;
+      position: relative;
+      text-align: center;
+      font-size: 12px;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.03);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .calendar-cell:hover{
+       transform:  scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.4s ease;
+  background-color: #f5f5ff;
+    }
+
+    .calendar-cell .date {
+      position: absolute;
+      top: 5px;
+      left: 8px;
+      font-weight: bold;
+      font-size: 11px;
+    }
+
+    .calendar-cell img {
+      width: 45px;
+      height: 45px;
+      margin-top: 8px;
+    }
+
+    /* Popup */
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      padding: 20px;
+      display: none;
+      z-index: 999;
+      width: 250px;
+      font-size: 14px;
+    }
+
+    .popup h3 {
+      margin-top: 0;
+    }
+
+    .popup .close-btn {
+      background-color: #ff9999;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      float: right;
+      font-size: 13px;
+    }
+
+    .popup .mood-entry {
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      z-index: 998;
+      display: none;
+    }
+
+    #back {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 45px;
+    }
+  </style>
+</head>
+<body>
+  <h1 class="anim-scroll">🗓️ Mood Calendar Overview</h1>
+
+  <a href="mood-log.html" id="back-link">
+    <img src="assets/back-arrow.png" id="back" />
+  </a>
+
+  <div class="calendar-container anim-scroll">
+    <div class="calendar-wrapper">
+      <button id="prevMonth" class="arrow-btn left">←</button>
+
+      <div class="calendar-content">
+        <h2 id="month-year"></h2>
+        <div class="calendar-grid" id="calendar"></div>
+      </div>
+
+      <button id="nextMonth" class="arrow-btn right">→</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <button class="close-btn" onclick="closePopup()">Close</button>
+    <h3>Mood Entry</h3>
+    <div id="popup-content"></div>
+  </div>
+
+  <script type="module">
+import { protectPage } from "./authGuard.js";
+protectPage();
+</script>
+
+
+
+
+
+
+
+
+<script type="module">
+
+
+import { db, auth, collection, getDocs } from "./firebase.js";
+import { doc, getDoc } from "./firebase.js";
+
+/* ===== Sidebar Active Link ===== */
+const currentPath = window.location.pathname.split("/").pop(); // e.g., "index.html"
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+  const linkPath = link.getAttribute("href").split("/").pop();
+  if (linkPath === currentPath || (linkPath === "index.html" && currentPath === "")) {
+    link.classList.add("active");
+  }
+});
+
+
+
+
+const calendar = document.getElementById("calendar");
+const monthYear = document.getElementById("month-year");
+const popup = document.getElementById("popup");
+const popupContent = document.getElementById("popup-content");
+const overlay = document.getElementById("overlay");
+
+const moodImageMap = {
+  happiness: "happiness",
+  happy: "happiness",
+  anxiety: "anxiety",
+  neutral: "neutral",
+  sadness: "sadness",
+  sad: "sadness",
+  tiredness: "tiredness",
+  tired: "tiredness",
+  anger: "anger",
+  angry: "anger",
+  focus: "focus",
+  loving: "loving",
+  numbness: "numbness",
+  numb: "numbness",
+  overwhelmed: "overwhelmed"
+};
+
+let moodLog = [];
+let currentDate = new Date();
+
+// Fetch moods once user is logged in
+async function fetchMoodLog(user) {
+  if (!user) return;
+  try {
+    console.log("Fetching moods for user:", user.uid);
+
+    // Reference to the user's document in moodLogs collection
+    const userDocRef = doc(db, "moodLogs", user.uid);
+    const userDocSnap = await getDoc(userDocRef);
+
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      moodLog = userData.logs || []; // logs array from document
+      console.log("Fetched mood log:", moodLog);
+      renderCalendar(currentDate);
+    } else {
+      console.log("No mood logs found for this user");
+      moodLog = [];
+      renderCalendar(currentDate);
+    }
+  } catch (err) {
+    console.error("Error fetching mood logs:", err);
+  }
+}
+
+
+auth.onAuthStateChanged(user => {
+  if (user) fetchMoodLog(user);
+});
+
+
+// Render calendar
+function renderCalendar(date) {
+  calendar.innerHTML = "";
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  monthYear.textContent = `${date.toLocaleString("default", { month: "long" })} ${year}`;
+
+  const dayMap = {};
+  moodLog.forEach(entry => {
+    const [entryMonth, entryDay, entryYear] = entry.date.split("/").map(Number);
+    if (entryYear === year && entryMonth - 1 === month) {
+      if (!dayMap[entryDay]) dayMap[entryDay] = [];
+      dayMap[entryDay].push(entry);
+    }
+  });
+
+  for (let i = 0; i < firstDay; i++) {
+    const emptyCell = document.createElement("div");
+    emptyCell.className = "calendar-cell";
+    calendar.appendChild(emptyCell);
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const cell = document.createElement("div");
+    cell.className = "calendar-cell";
+
+    const dateLabel = document.createElement("div");
+    dateLabel.className = "date";
+    dateLabel.textContent = day;
+    cell.appendChild(dateLabel);
+
+    const moods = dayMap[day] || [];
+    moods.forEach(mood => {
+      const img = document.createElement("img");
+      img.src = `assets/${moodImageMap[mood.mood] || mood.mood}.png`;
+      img.alt = mood.mood;
+      cell.appendChild(img);
+    });
+
+    if (moods.length > 0) {
+      cell.addEventListener("click", () => showPopup(day, moods));
+    }
+
+    calendar.appendChild(cell);
+  }
+}
+
+// Popup functions
+function showPopup(day, entries) {
+  popupContent.innerHTML = "";
+  entries.forEach(entry => {
+    const div = document.createElement("div");
+    div.className = "mood-entry";
+    div.innerHTML = `
+      <strong>Date:</strong> ${entry.date}<br>
+      <strong>Time:</strong> ${entry.time}<br>
+      <strong>Mood:</strong> ${entry.mood} 
+      <img src="assets/${moodImageMap[entry.mood] || entry.mood}.png" width="18"/>
+    `;
+    popupContent.appendChild(div);
+  });
+  overlay.style.display = "block";
+  popup.style.display = "block";
+}
+
+// Close when clicking close button
+document.querySelector(".close-btn").addEventListener("click", closePopup);
+
+// Close when clicking overlay
+overlay.addEventListener("click", closePopup);
+
+function closePopup() {
+  popup.style.display = "none";
+  overlay.style.display = "none";
+}
+
+
+// Month navigation
+document.getElementById("prevMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  renderCalendar(currentDate);
+};
+document.getElementById("nextMonth").onclick = () => {
+  currentDate.setMonth(currentDate.getMonth() + 1);
+  renderCalendar(currentDate);
+};
+
+
+
+
+</script>
+
+
+
+
+</body>
+</html>

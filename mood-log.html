@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>moodlog</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="animations.css">
+    <script src="animations.js"></script>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <style>
+
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@500;700&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif; /* for main readable text */
+}
+
+
+
+    :root {
+  --soft-blue: #cde6fe;         /* Calmness, trust */
+  --soft-green: #b7fdb7;        /* Restoration, peace */
+  --lavender: #E6E6FA;          /* Relaxation, sleep */
+  --soft-pink: #ffd4ee;         /* Emotional safety */
+  --white: #FFFFFF;             /* Clarity, openness */
+  --earth-tone: #D8CAB8;        /* Grounding */
+}
+        
+        body{
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .sidebar{
+         background-color: var(--soft-pink);
+         width: 100px;
+         transition: width 0.3s ease;
+
+         height: 100vh;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         border-radius: 50px;
+         margin-left: 25px;
+
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100vh;
+          z-index: 1000;
+
+        }
+
+        .sidebar:hover {
+          width: 200px;
+        }
+
+        .sidebar a{
+          margin: 15px;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          color: blue;
+         
+          
+
+        }
+
+        .sidebar a:hover{
+            background-color: var(--white);
+            border-radius: 50px;
+            padding: 0px 20px;
+            font-weight: bolder;
+             font-size: 18px;
+
+        }
+
+        .sidebar a.active{
+            background-color: var(--soft-blue);
+            border-radius: 30px;
+            font-weight: bolder;
+            color: #7300ff;
+            padding: 0px 15px;
+            border: 5px double #86bef2;
+
+        }
+
+        .label {
+         transition: opacity 0.3s ease, width 0.3s ease;
+         white-space: nowrap;
+        }
+
+
+        .icon{
+            width: 60px;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .sidebar:not(:hover) .label {
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+        overflow: hidden;
+        }
+
+        .sidebar:hover .label {
+         opacity: 1;
+        visibility: visible;
+        width: auto;
+         }
+
+
+
+        a img{
+            width:60px;
+            
+        }
+
+        .main{
+        flex-wrap: wrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 92vh;
+        background-color: var(--soft-blue);
+        margin-left: 150px;
+        transition: margin-left 0.3s ease, width 0.3s ease;
+        width:  calc(98% - 150px);
+        overflow: auto;
+        margin-top:20px;
+        margin-bottom:20px;
+        margin-right: 20px;
+        border-radius: 50px;
+
+        }
+
+        .sidebar:hover ~ main .main {
+         margin-left: 250px; /* match or slightly exceed the expanded sidebar width */
+         width: calc(100% - 250px);
+        }
+
+
+        .moodbox{
+            display: flex;
+            flex-direction: column;
+            width: 800px;
+            height: 250px;
+            border-radius: 50px;
+            background-color: var(--soft-green);
+        }
+
+        main h1{
+            display: block;
+            text-align: center;
+            font-size: 50px;
+            margin-top: 10px;
+        }
+
+        main button{
+            display: block;
+            margin: 50px;
+            padding: 20px 50px;
+            border: 5px double #f829ce;
+            background-color: #feb4ef;
+            font-size: 25px;
+            border-radius: 50px;
+
+        }
+
+        main button:hover{
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.6);
+            background-color: #ec67d2;
+            transform: scale(1.0);
+             border: 5px double var(--white);
+        }
+
+        
+
+       
+
+        .firstrow, .secondrow {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
+        place-items: center; /* centers both horizontally and vertically */
+        gap: 10px; /* optional: adds space between grid items */
+        margin: 30px 0; /* vertical spacing between the two rows */
+        }
+
+
+       
+
+        .moodbox img {
+        width: 50px;
+        height: 50px;
+        background-color: aliceblue;
+        object-fit: cover;
+        border-radius: 50px;
+        padding: 5px;
+        transition: transform 0.2s ease;
+        cursor: pointer;
+         box-shadow: 9px 10px 8px 0px rgba(0,0,0,0.2);
+       
+        }
+
+       .moodbox img:hover {
+       transform: scale(1.1); /* small hover zoom effect */
+        box-shadow: 9px 10px 5px 0px rgba(0,0,0,0.40);
+       }
+
+
+       .moodbox img.selected {
+            border: 3px solid black;
+            transform: scale(1.2);
+             box-shadow: 9px 10px 5px 0px rgba(0,0,0,0.30);
+       }
+
+
+
+
+       .moodsum {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* pushes date-time to bottom */
+    align-items: center;
+    height: 92vh;
+    background-color: var(--soft-blue);
+    margin-left: 150px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    border-radius: 50px;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    width:  calc(98% - 150px);
+    overflow: auto;
+}
+
+ .sidebar:hover ~ main .moodsum {
+         margin-left: 250px; /* match or slightly exceed the expanded sidebar width */
+         width: calc(100% - 250px);
+        }
+
+
+    
+
+.moodinfo {
+    text-align: center;
+    background-color: #aefeae;
+    border: 1px solid black;
+    width: 500px;
+    border-radius:50px ;
+    cursor: pointer;
+}
+
+.moodinfo:hover{
+    background-color: #91fc91;
+    border: 5px double black;
+    
+}
+
+.moodinfo img {
+    width: 150px;
+    opacity: 100%;
+    background-color: var(--white);
+    border-radius: 50%;
+    margin-top: 30px;
+}
+
+.moodinfo h3 {
+    font-size: 50px;
+    margin-bottom: 10px;
+    
+}
+
+.moodinfo p {
+    font-size: 25px;
+    margin-bottom: 40px;
+}
+
+.date-time {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    font-weight: bold;
+    
+}
+
+       
+.image-item {
+      position: relative;
+      cursor: pointer;
+    }
+
+
+    .tooltip {
+  position: absolute;
+  bottom: 100%;          /* Places the tooltip above the image */
+  left: 50%;             /* Centers horizontally */
+  transform: translateX(-20%) translateY(50px); /* Adjust vertical gap */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  width: 150px;          /* Consistent size for all tooltips */
+  z-index: 10;
+  background: none;
+  padding: 0;
+  border: none;
+}
+
+.tooltip img {
+  width: 100%;
+  border: none;
+  background: none;
+  box-shadow: none;
+    height: auto;
+    object-fit: contain;
+  opacity: 90%;
+}
+
+.tooltip-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -100%);
+  color: rgb(0, 0, 0);
+  font-weight: bold;
+  text-align: center;
+}
+
+
+    
+#journal-book-icon{
+    position: fixed;
+    width: 70px;
+    background-color: #60a7e6;
+    border-radius: 50%;
+    padding: 5px;
+    top:40px;
+    left: 1150px;
+}
+
+#journal-book-icon:hover{
+    background-color: #1d8ef1;
+     transform: scale(1.1); /* small hover zoom effect */
+        box-shadow: 9px 10px 5px 0px rgba(0,0,0,0.20);
+}
+
+    </style>
+</head>
+<body>
+
+ 
+    <div class="sidebar">
+
+        <a href="index.html">
+            <div class="icon"><img src="assets/home.png"></div>
+            <span class="label">Home</span>
+        </a>
+        <a href="mood-log.html">
+            <div class="icon"><img src="assets/smiley.png"></div>
+            <span class="label">Mood log</span>
+        </a>
+        <a href="journal.html">
+            <div class="icon"><img src="assets/journal.png"></div>
+            <span class="label">Journal</span>
+        </a>
+        <a href="breathe.html">
+            <div class="icon"><img src="assets/breathe.png"></div>
+            <span class="label">Breathe</span>
+        </a>
+        <a href="stats.html">
+            <div class="icon"><img src="assets/stats.png"></div>
+            <span class="label">Stats</span>
+        </a>
+
+          <a href="#" id="settingsLink">
+            <div class="icon"><img src="assets/settings.png"></div>
+            <span class="label">settings</span>
+        </a>
+
+    </div>
+
+
+    <!-- SETTINGS MODAL -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+
+    <div class="profile-section">
+      <div id="current-pfp" class="current-pfp">😊</div>
+      <h2>User Details</h2>
+    </div>
+
+    <p>👤 <strong>Username:</strong> <span id="modal-username">Loading...</span></p>
+    <p>✉️ <strong>Email:</strong> <span id="modal-email">Loading...</span></p>
+
+    <!-- PFP chooser -->
+    <div id="pfp-chooser" class="pfp-selector" style="display:none;">
+      <h3>Choose your profile picture</h3>
+      <div class="pfp-options">
+        <span class="pfp-option">😊</span>
+        <span class="pfp-option">😎</span>
+        <span class="pfp-option">🌸</span>
+        <span class="pfp-option">🌼</span>
+        <span class="pfp-option">🐻</span>
+        <span class="pfp-option">🦋</span>
+      </div>
+    </div>
+
+    <!-- Change PFP button -->
+    <button id="change-pfp-btn">Change PFP</button>
+
+    <button id="modal-logout" class="logout-btn">Logout</button>
+  </div>
+</div>
+
+    <main>
+
+     <div class="main  ">
+
+         <a href="mood-entries.html" id="entries-link">
+           <img src="assets/journal-entries.png" id="journal-book-icon">
+         </a>
+
+        <h1 class="anim-scroll">How are you feeling today?</h1>
+        <div class="moodbox anim-scroll">
+           <div class="firstrow">
+              <div class="image-item">
+                <img src="assets/anger.png" data-mood="anger">
+                 <div  class="tooltip">
+                       <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                       <div class="tooltip-text"></div>
+                 </div>
+              </div>
+              
+              <div class="image-item">
+               <img src="assets/anxiety.png" data-mood="anxiety">
+                <div  class="tooltip">
+                      <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                      <div class="tooltip-text"></div>
+              </div>
+              </div>
+              
+              <div class="image-item">
+                 <img src="assets/focus.png" data-mood="focus">
+                  <div  class="tooltip">
+                      <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                      <div class="tooltip-text"></div>
+                  </div>
+              </div>
+              
+              <div class="image-item">
+                <img src="assets/happiness.png" data-mood="happiness">
+                 <div  class="tooltip">
+                      <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                      <div class="tooltip-text"></div>
+                </div>
+              </div>
+              
+              <div class="image-item">
+                <img src="assets/numbness.png" data-mood="numbness">
+               <div  class="tooltip">
+                     <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                     <div class="tooltip-text"></div>
+              </div>
+              </div>
+              
+          </div>
+          <div class="secondrow">
+               
+               <div class="image-item">
+                <img src="assets/overwhelmed.png" data-mood="overwhelmed">
+                 <div  class="tooltip">
+                      <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                      <div class="tooltip-text"></div>
+                 </div>
+               </div>
+              
+               <div class="image-item">
+                 <img src="assets/sadness.png" data-mood="sadness">
+                  <div  class="tooltip">
+                         <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                         <div class="tooltip-text"></div>
+                  </div>
+               </div>
+             
+               <div class="image-item">
+                 <img src="assets/tiredness.png" data-mood="tiredness">
+                  <div class="tooltip">
+                       <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                       <div class="tooltip-text"></div>
+                  </div>
+               </div>
+             
+               <div class="image-item">
+                <img src="assets/loving.png" data-mood="loving">
+                 <div  class="tooltip">
+                     <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                     <div class="tooltip-text"></div>
+                 </div>
+               </div>
+              
+               <div class="image-item">
+                <img src="assets/neutral.png" data-mood="neutral">
+                 <div  class="tooltip">
+                     <img src="assets/message.png" alt="Tooltip Background" id="message-box">
+                     <div class="tooltip-text"></div>
+                 </div>
+               </div>
+              
+          </div>
+
+           
+        </div>
+
+       
+        
+        <button id="saveMood">SAVE</button>
+
+        
+
+
+     </div>
+
+     <div class="moodsum " style="display: none;">
+        
+
+         <h1 class="anim-scroll">Your Mood for today is,</h1>
+
+         <div class="moodinfo anim-scroll">
+              <img src="assets/happiness.png">
+              <h3>happy</h3>
+              <p>Description or message</p>
+      </div>
+
+    <div class="date-time">
+        <label>Date:</label>
+        <label>Time:</label>
+    </div>
+
+     <a href="mood-entries.html" id="entries-link">
+           <img src="assets/journal-entries.png" id="journal-book-icon">
+    </a>
+
+  </div>
+
+
+
+    </main>
+
+   <script type="module">
+import { protectPage } from "./authGuard.js";
+protectPage();
+</script>
+
+
+
+
+
+   
+<script type="module">
+
+
+import { db, auth, collection, getDocs, doc, getDoc,setDoc} from "./firebase.js";
+
+
+
+
+
+// ====== SETTINGS MODAL ======
+const settingsLink = document.getElementById("settingsLink");
+const settingsModal = document.getElementById("settingsModal");
+const closeBtn = settingsModal.querySelector(".close-btn");
+const modalUsername = document.getElementById("modal-username");
+const modalEmail = document.getElementById("modal-email");
+const modalLogout = document.getElementById("modal-logout");
+const currentPfp = document.getElementById("current-pfp");
+const pfpOptions = document.querySelectorAll(".pfp-option");
+const pfpChooser = document.getElementById("pfp-chooser");
+const changePfpBtn = document.getElementById("change-pfp-btn");
+
+
+// Open/close modal
+settingsLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  settingsModal.style.display = "flex";
+});
+closeBtn.addEventListener("click", () => settingsModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === settingsModal) settingsModal.style.display = "none"; });
+
+// Logout
+modalLogout.addEventListener("click", () => {
+  auth.signOut().then(() => window.location.href = "login.html");
+});
+
+
+
+// ====== MOOD LOGIC ======
+const moodDescriptions = {
+  anger: "Feeling frustrated or irritated.",
+  anxiety: "Feeling worried or nervous.",
+  focus: "You are concentrated and productive.",
+  happiness: "You are feeling joyful and upbeat.",
+  numbness: "Feeling emotionally flat or unresponsive.",
+  overwhelmed: "Feeling stressed or overloaded.",
+  sadness: "Feeling down or upset.",
+  tiredness: "Low energy, needing rest.",
+  loving: "You’re feeling affectionate and kind.",
+  neutral: "Feeling okay, neither good nor bad."
+};
+
+const moodImages = document.querySelectorAll('.moodbox img');
+let selectedMood = null;
+
+// Mood select
+moodImages.forEach(img => {
+  img.addEventListener('click', () => {
+    moodImages.forEach(i => i.classList.remove('selected'));
+    img.classList.add('selected');
+    selectedMood = img.dataset.mood;
+  });
+});
+
+// Show mood summary
+function showMoodSummary(mood, date, time) {
+  document.querySelector('.main').style.display = 'none';
+  document.querySelector('.moodsum').style.display = 'flex';
+  document.querySelector('.moodsum img').src = `assets/${mood}.png`;
+  document.querySelector('.moodsum h3').textContent = mood;
+  document.querySelector('.moodsum p').textContent = moodDescriptions[mood];
+  document.querySelector('.date-time label:first-child').textContent = "Date: " + date;
+  document.querySelector('.date-time label:last-child').textContent = "Time: " + time;
+}
+
+// Click moodinfo to change mood
+document.querySelector('.moodinfo').addEventListener('click', () => {
+  const confirmChange = confirm("Do you want to change today’s mood?");
+  if (confirmChange) {
+    document.querySelector('.main').style.display = 'flex';
+    document.querySelector('.moodsum').style.display = 'none';
+  }
+});
+
+// ====== SAVE MOOD TO FIRESTORE ======
+document.getElementById('saveMood').addEventListener('click', async () => {
+  if (!selectedMood) {
+    alert('Please select a mood before saving.');
+    return;
+  }
+
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const now = new Date();
+  const dateString = now.toLocaleDateString();
+  const timeString = now.toLocaleTimeString();
+
+  const userMoodDocRef = doc(db, "moodLogs", user.uid);
+  const userMoodSnap = await getDoc(userMoodDocRef);
+
+  let logs = [];
+  if (userMoodSnap.exists()) logs = userMoodSnap.data().logs || [];
+
+  const existingEntryIndex = logs.findIndex(entry => entry.date === dateString);
+
+  if (existingEntryIndex !== -1) {
+    const confirmUpdate = confirm("You already saved your mood today. Do you want to update it?");
+    if (confirmUpdate) {
+      logs[existingEntryIndex].mood = selectedMood;
+      logs[existingEntryIndex].time = timeString;
+    } else {
+      return;
+    }
+  } else {
+    logs.push({ mood: selectedMood, date: dateString, time: timeString });
+  }
+
+  await setDoc(userMoodDocRef, { logs }, { merge: true });
+  showMoodSummary(selectedMood, dateString, timeString);
+});
+
+// ====== LOAD TODAY'S MOOD ON PAGE LOAD ======
+window.addEventListener('DOMContentLoaded', async () => {
+  const waitForAuth = new Promise(resolve => {
+    const unsub = auth.onAuthStateChanged(user => {
+      unsub();
+      resolve(user);
+    });
+  });
+
+  const user = await waitForAuth;
+  if (!user) return;
+
+  const userMoodDocRef = doc(db, "moodLogs", user.uid);
+  const userMoodSnap = await getDoc(userMoodDocRef);
+  const today = new Date().toLocaleDateString();
+
+  if (userMoodSnap.exists()) {
+    const data = userMoodSnap.data();
+    const todayEntry = data.logs?.find(entry => entry.date === today);
+    if (todayEntry) {
+      showMoodSummary(todayEntry.mood, todayEntry.date, todayEntry.time);
+      return;
+    }
+  }
+
+  document.querySelector('.main').style.display = 'flex';
+  document.querySelector('.moodsum').style.display = 'none';
+});
+
+// ====== TOOLTIP LOGIC ======
+document.querySelectorAll('.image-item').forEach(item => {
+  const img = item.querySelector('img');
+  const tooltip = item.querySelector('.tooltip');
+  const tooltipText = item.querySelector('.tooltip-text');
+  tooltipText.textContent = img.dataset.mood;
+
+  item.addEventListener('mouseenter', () => {
+    tooltip.style.visibility = 'visible';
+    tooltip.style.opacity = '1';
+  });
+
+  item.addEventListener('mouseleave', () => {
+    tooltip.style.opacity = '0';
+    setTimeout(() => { tooltip.style.visibility = 'hidden'; }, 200);
+  });
+});
+</script>
+
+
+
+
+
+
+
+<script type="module" src="./settings.js"></script>
+
+</body>
+</html>

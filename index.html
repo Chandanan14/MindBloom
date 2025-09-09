@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito&family=Patrick+Hand&family=Poppins:wght@700&family=Quicksand:wght@600&display=swap" rel="stylesheet">
+     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="responsive.css">
+    
+    <script src="animations.js"></script>
+
+
+    <style>
+
+
+     @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@500;700&display=swap');
+
+    body {
+        font-family: 'Nunito', sans-serif; /* for main readable text */
+         }
+    .greeting-box{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: aliceblue;
+        padding: 10px 20px;
+        border-radius: 40px;
+        width: 1000px;
+        margin-top: 30px;
+              
+      }
+
+       .greeting{
+        font-size: 30px;
+       
+       }
+
+       .time-date{
+        font-size: 30px;
+        margin-right: 0;
+        white-space: nowrap;
+       }
+
+
+    
+
+
+
+   .grid-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 30px;
+  
+}
+
+.section {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.section:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.section h3 {
+  margin-top: 0;
+  font-size: 1.2rem;
+  background-color: var(--lavender);
+  border-radius: 30px;
+  width: 150px;
+  
+}
+
+
+.section h3, .section p {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+.grid-sections a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.grid-sections a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+
+
+.affirmation-card {
+  background-color: #fff0f5;
+  border-left: 8px solid #ff9ac1;
+  font-family: 'Georgia', serif;
+  width: 1000px;
+  margin: 30px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  
+}
+
+.affirmation-card h2 {
+  color: #cc0066;
+}
+
+#affirmation-text {
+  font-size: 18px;
+  font-style: italic;
+  color: #5c3c4f;
+  padding: 0;
+  margin-left: 10px;
+  
+}
+
+
+       
+.mood  h3::before {
+  content: '📋'; /* different for each section */
+  background-color: var(--soft-green);
+  border-radius: 50%;
+  padding: 6px;
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.journal  h3::before {
+  content: '📓'; /* different for each section */
+  background-color: var(--soft-green);
+  border-radius: 50%;
+  padding: 6px;
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+ .breathe  h3::before {
+  content: '💨'; /* different for each section */
+  background-color: var(--soft-green);
+  border-radius: 50%;
+  padding: 6px;
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+ .stats  h3::before {
+  content: '📊'; /* different for each section */
+  background-color: var(--soft-green);
+  border-radius: 50%;
+  padding: 6px;
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+
+
+
+@keyframes bounce {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.05); }
+  100% { transform: scale(1.02); }
+}
+
+
+      
+
+
+
+       
+    </style>
+</head>
+<body>
+
+    
+    
+    <div class="sidebar">
+
+       
+
+        <a href="index.html">
+            <div class="icon"><img src="assets/home.png"></div>
+            <span class="label">Home</span>
+        </a>
+        <a href="mood-log.html">
+            <div class="icon"><img src="assets/smiley.png"></div>
+            <span class="label">Mood log</span>
+        </a>
+        <a href="journal.html">
+            <div class="icon"><img src="assets/journal.png"></div>
+            <span class="label">Journal</span>
+        </a>
+        <a href="breathe.html">
+            <div class="icon"><img src="assets/breathe.png"></div>
+            <span class="label">Breathe</span>
+        </a>
+        <a href="stats.html">
+            <div class="icon"><img src="assets/stats.png"></div>
+            <span class="label">Stats</span>
+        </a>
+
+         <a href="#" id="settingsLink">
+            <div class="icon"><img src="assets/settings.png"></div>
+            <span class="label">settings</span>
+        </a>
+
+    </div>
+
+  
+
+
+    <!-- SETTINGS MODAL -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+
+    <div class="profile-section">
+      <div id="current-pfp" class="current-pfp">😊</div>
+      <h2>User Details</h2>
+    </div>
+
+    <p>👤 <strong>Username:</strong> <span id="modal-username">Loading...</span></p>
+    <p>✉️ <strong>Email:</strong> <span id="modal-email">Loading...</span></p>
+
+    <!-- PFP chooser -->
+    <div id="pfp-chooser" class="pfp-selector" style="display:none;">
+      <h3>Choose your profile picture</h3>
+      <div class="pfp-options">
+        <span class="pfp-option">😊</span>
+        <span class="pfp-option">😎</span>
+        <span class="pfp-option">🌸</span>
+        <span class="pfp-option">🌼</span>
+        <span class="pfp-option">🐻</span>
+        <span class="pfp-option">🦋</span>
+      </div>
+    </div>
+
+    <!-- Change PFP button -->
+    <button id="change-pfp-btn">Change PFP</button>
+
+    <button id="modal-logout" class="logout-btn">Logout</button>
+  </div>
+</div>
+
+
+
+
+
+
+     <main>
+
+     <div class="main">
+
+
+
+         <div class="greeting-box anim-scroll">
+        <h1 class="greeting">Hello, <span id="name">Chandana</span> 👋, hope you’re feeling okay today.</h1>
+
+        <div class="time-date">
+
+          <span id="datetime-weather">Loading...</span>
+           
+        </div>
+      </div>
+
+       <div class="grid-sections anim-scroll">
+        <a href="mood-log.html">
+                <div class="section mood last-mood-box  anim-hover">
+  <h3> Mood Log</h3>
+  <p id="last-mood">Loading...</p>
+</div>
+        </a>
+    
+
+      <a href="journal.html">
+         <div class="section journal last-journal-box  anim-hover">
+  <h3> Journal</h3>
+  <p id="journal-preview">Loading...</p>
+</div>
+      </a>
+
+     
+      <a href="breathe.html">
+           <div class="section breathe last-breathe-box  anim-hover">
+    <h3>Breathe</h3>
+    <p id="breatheText">Loading...</p>
+  </div>
+      </a>
+
+    
+
+      <a href="stats.html">
+           <div class="section stats last-stats-box  anim-hover">
+    <h3>stats</h3>
+    <p id="stats">Loading...</p>
+  </div>
+      </a>
+ 
+
+    </div>
+
+    <div class="card  affirmation-card  anim-scroll">
+  <h2>🌼 Daily Affirmation</h2>
+  <p id="affirmation-text">Loading...</p>
+</div>
+
+
+
+
+
+       
+     </div>
+
+
+    </main>
+
+
+
+<script type="module">
+import { protectPage } from "./authGuard.js";
+protectPage();
+</script>
+
+
+
+
+
+
+<script type="module">
+import { db, auth, collection, getDocs, doc, getDoc, query, where, updateDoc } from "./firebase.js";
+
+
+
+// ====== SETTINGS MODAL ======
+const settingsLink = document.getElementById("settingsLink");
+const settingsModal = document.getElementById("settingsModal");
+const closeBtn = settingsModal.querySelector(".close-btn");
+const modalUsername = document.getElementById("modal-username");
+const modalEmail = document.getElementById("modal-email");
+const modalLogout = document.getElementById("modal-logout");
+const currentPfp = document.getElementById("current-pfp");
+const pfpOptions = document.querySelectorAll(".pfp-option");
+const pfpChooser = document.getElementById("pfp-chooser");
+const changePfpBtn = document.getElementById("change-pfp-btn");
+
+// Open/close modal
+settingsLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  settingsModal.style.display = "flex";
+});
+closeBtn.addEventListener("click", () => settingsModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === settingsModal) settingsModal.style.display = "none"; });
+
+// Logout
+modalLogout.addEventListener("click", () => {
+  auth.signOut().then(() => window.location.href = "login.html");
+});
+
+
+// Elements
+const nameEl = document.getElementById("name");
+const lastMoodEl = document.getElementById("last-mood");
+const journalPreviewEl = document.getElementById("journal-preview");
+const breatheTextEl = document.getElementById("breatheText");
+const statsEl = document.getElementById("stats");
+const affirmationTextEl = document.getElementById("affirmation-text");
+const datetimeWeatherEl = document.getElementById("datetime-weather");
+const greeting = document.querySelector(".greeting");
+
+// Helper functions
+function formatDateISO(date) {
+  const d = new Date(date);
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+
+function stripHTML(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
+}
+
+// Affirmations
+const affirmations = [
+    "You are capable of amazing things.",
+    "Today, I choose peace over worry.",
+    "I am proud of how far I've come.",
+    "Everything I need is already within me.",
+    "I am growing, learning, and becoming my best self.",
+    "It’s okay to rest. I deserve it.",
+    "I trust myself and my journey.",
+    "I radiate positivity and kindness.",
+    "My small steps matter and lead to big changes.",
+    "I’m allowed to feel, heal, and thrive."
+];
+
+function showAffirmation() {
+    const randomIndex = Math.floor(Math.random() * affirmations.length);
+    affirmationTextEl.textContent = `“${affirmations[randomIndex]}”`;
+}
+
+// Weather & Time
+const API_KEY = "5fe4872d760102d44b169c84a1055398";
+const CITY = "Bangalore";
+
+function getWeatherIcon(description) {
+    description = description.toLowerCase();
+
+    if (description.includes("clear")) return "☀️";
+    if (description.includes("few clouds")) return "🌤️";
+    if (description.includes("scattered clouds")) return "🌥️";
+    if (description.includes("broken clouds")) return "☁️";
+    if (description.includes("overcast clouds")) return "☁️"; // keeps cloud emoji
+    if (description.includes("rain")) return "🌧️";
+    if (description.includes("thunderstorm")) return "⛈️";
+    if (description.includes("snow")) return "❄️";
+    if (description.includes("mist") || description.includes("fog")) return "🌫️";
+
+    return "🌤️"; // default
+}
+
+function updateWeatherTime() {
+    const now = new Date();
+    const date = now.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+    const time = now.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', hour12: true });
+
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CITY}&appid=${API_KEY}`)
+        .then(res => res.json())
+        .then(data => {
+             console.log(data);
+             console.log(data.weather[0].description);
+
+            const weatherDesc = data.weather[0].description;
+            const icon = getWeatherIcon(weatherDesc);
+            datetimeWeatherEl.textContent = `${icon} ${date}  -  ${time}`;
+        })
+        .catch(() => {
+            datetimeWeatherEl.textContent = `[🌤️ ${date} | ${time}]`;
+        });
+}
+
+// Display dashboard
+auth.onAuthStateChanged(async (user) => {
+    if (!user) { window.location.href = "login.html"; return; }
+
+    try {
+        // User info
+        const userDocRef = doc(db, "users", user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        const username = userDocSnap.exists() ? userDocSnap.data().username : user.email.split("@")[0];
+        const pfp = userDocSnap.exists() ? userDocSnap.data().pfp || "😊" : "😊";
+
+        nameEl.textContent = username;
+        greeting.innerHTML = `${pfp} Hello, <span id="name">${username}</span> 👋, hope you’re feeling okay today.`;
+
+        // --- Mood ---
+        const moodDocRef = doc(db, "moodLogs", user.uid);
+        const moodDocSnap = await getDoc(moodDocRef);
+        const moods = moodDocSnap.exists() ? (moodDocSnap.data().logs || []) : [];
+        const todayStr = formatDateISO(new Date());
+        const todayMood = moods.find(m => formatDateISO(m.date) === todayStr);
+
+        const moodEmojis = { anger:"😠", anxiety:"😰", focus:"🎯", happiness:"😊", numbness:"😐", overwhelmed:"😵", sadness:"😢", tiredness:"🥱", loving:"❤️", neutral:"😶" };
+        lastMoodEl.textContent = todayMood ? `${moodEmojis[todayMood.mood] || '🌤️'} ${todayMood.mood.charAt(0).toUpperCase()+todayMood.mood.slice(1)} (${todayMood.time || ''})` : "You haven't logged your mood today.";
+
+        // --- Journal ---
+        const journalRef = collection(db, "journalEntries");
+        const q = query(journalRef, where("userId", "==", user.uid));
+        const journalSnap = await getDocs(q);
+        const todayJournal = [];
+        let journalCount = 0;
+        journalSnap.forEach(doc => {
+            const data = doc.data();
+            if (formatDateISO(data.date) === todayStr) todayJournal.push(stripHTML(data.content));
+            journalCount++;
+        });
+        journalPreviewEl.textContent = todayJournal.length > 0 ? `“${todayJournal[todayJournal.length - 1].substring(0,100)}${todayJournal[todayJournal.length - 1].length > 100 ? '...' : ''}”` : "You haven’t written in your journal today.";
+
+        // --- Breathing ---
+const breatheCol = collection(db, "breathSessions", user.uid, "sessions");
+const breatheSnap = await getDocs(breatheCol);
+
+const todayBreathe = breatheSnap.docs.map(d => d.data()).find(entry => {
+    if(!entry.createdAt) return false;
+    const entryDate = entry.createdAt.toDate();
+    return entryDate.toLocaleDateString() === new Date().toLocaleDateString();
+});
+
+breatheTextEl.textContent = todayBreathe
+    ? `You completed a ${todayBreathe.duration} session at ${todayBreathe.createdAt.toDate().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+    : "No breathing session completed today.";
+
+
+        // --- Quick Stats ---
+        statsEl.textContent = `📝 ${journalCount} Journals | 😊 ${moods.length} Moods | 💨 ${breatheSnap.docs.length} Breaths`;
+
+        // --- Affirmation ---
+        showAffirmation();
+
+        // --- Weather & Time ---
+        updateWeatherTime();
+        setInterval(updateWeatherTime, 60000);
+
+    } catch (err) {
+        console.error("Error fetching dashboard data:", err);
+    }
+});
+
+</script>
+
+
+
+
+
+<script type="module" src="./settings.js"></script>
+
+
+
+</body>
+</html>

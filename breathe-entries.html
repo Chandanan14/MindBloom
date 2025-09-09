@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Breathe Entries</title>
+  <link rel="stylesheet" href="animations.css">
+  <script src="animations.js"></script>
+  <link rel="stylesheet" href="responsive.css">
+ <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+  <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@500;700&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif; /* for main readable text */
+}
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e0f7fa, #f3e5f5);
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #3b7b7b;
+      margin-bottom: 10px;
+    }
+
+    #filter {
+      display: block;
+      margin: 10px auto 25px;
+      padding: 10px 15px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      background-color: #dcedc8;
+      cursor: pointer;
+    }
+
+    .entry-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .entry {
+      background-color: #fff7e6;
+      padding: 15px 20px;
+      border-radius: 15px;
+      box-shadow: 2px 2px 12px rgba(0,0,0,0.08);
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .entry:hover{
+       transform:  scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+    }
+
+    .entry .info {
+      text-align: left;
+    }
+
+    .entry .info strong {
+      color: #444;
+    }
+
+    .duration {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 12px;
+      font-weight: bold;
+    }
+
+    .duration[data-min="1"] {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    .duration[data-min="2"] {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .duration[data-min="3"] {
+      background-color: #e3f2fd;
+      color: #1565c0;
+    }
+
+    #back {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 40px;
+    }
+
+    .no-data {
+      color: #666;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+      gap: 10px;
+    }
+
+    .pagination button {
+      background-color: #ffd180;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .pagination button:disabled {
+      background-color: #eee;
+      color: #aaa;
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="breathe.html">
+    <img src="assets/back-arrow.png" id="back" alt="Back" />
+  </a>
+
+  <h1 class="anim-scroll">🧘‍♀️ Your Breathe Session History</h1>
+
+  <select id="filter">
+    <option value="all">Show All</option>
+    <option value="1 min">1 Minute Sessions</option>
+    <option value="2 min">2 Minute Sessions</option>
+    <option value="3 min">3 Minute Sessions</option>
+  </select>
+
+  <div class="entry-container anim-scroll" id="entries"></div>
+
+  <div class="pagination">
+    <button id="prevPage">← Prev</button>
+    <button id="nextPage">Next →</button>
+  </div>
+  <script type="module">
+import { protectPage } from "./authGuard.js";
+protectPage();
+</script>
+
+
+
+
+<script type="module">
+
+import { auth, db, collection, query, orderBy, getDocs } from "./firebase.js";
+
+
+/* ===== Sidebar Active Link ===== */
+const currentPath = window.location.pathname.split("/").pop(); // e.g., "index.html"
+
+document.querySelectorAll(".sidebar a").forEach(link => {
+  const linkPath = link.getAttribute("href").split("/").pop();
+  if (linkPath === currentPath || (linkPath === "index.html" && currentPath === "")) {
+    link.classList.add("active");
+  }
+});
+
+
+const container = document.getElementById("entries");
+const filter = document.getElementById("filter");
+const prevBtn = document.getElementById("prevPage");
+const nextBtn = document.getElementById("nextPage");
+
+const entriesPerPage = 5;
+let currentPage = 1;
+let currentList = [];     // all fetched sessions
+let displayedList = [];   // sessions after filtering
+
+function getEmoji(duration) {
+  switch(duration) {
+    case "1 min": return "🍃";
+    case "2 min": return "🌸";
+    case "3 min": return "✨";
+    default: return "🌬️";
+  }
+}
+
+function renderEntries(list) {
+  container.innerHTML = "";
+
+  const start = (currentPage - 1) * entriesPerPage;
+  const end = start + entriesPerPage;
+  const paginated = list.slice(start, end);
+
+  if (paginated.length === 0) {
+    container.innerHTML = "<div class='no-data'>No sessions found.</div>";
+    return;
+  }
+
+  paginated.forEach(session => {
+    const min = session.duration[0]; // "1" from "1 min"
+    const emoji = getEmoji(session.duration);
+    const div = document.createElement("div");
+    div.className = "entry";
+    div.innerHTML = `
+      <div class="info">
+        <div><strong>Date:</strong> ${session.createdAt.toDate().toLocaleString()}</div>
+      </div>
+      <div class="duration" data-min="${min}">
+        ${emoji} ${session.duration}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  // Update pagination buttons
+  prevBtn.disabled = currentPage === 1;
+  nextBtn.disabled = end >= list.length;
+}
+
+async function fetchSessions() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const userSessionsRef = collection(db, "breathSessions", user.uid, "sessions");
+  const q = query(userSessionsRef, orderBy("createdAt", "desc"));
+  const snapshot = await getDocs(q);
+  const sessions = snapshot.docs.map(doc => doc.data());
+
+  console.log("Fetched sessions:", sessions);
+
+  currentList = sessions;
+  displayedList = [...currentList]; // initialize displayed list
+  currentPage = 1;
+  renderEntries(displayedList);
+}
+
+// Filter change
+filter.addEventListener("change", () => {
+  const val = filter.value;
+  currentPage = 1;
+  displayedList = val === "all" ? [...currentList] : currentList.filter(s => s.duration === val);
+  renderEntries(displayedList);
+});
+
+// Pagination
+prevBtn.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderEntries(displayedList);
+  }
+});
+
+nextBtn.addEventListener("click", () => {
+  if ((currentPage * entriesPerPage) < displayedList.length) {
+    currentPage++;
+    renderEntries(displayedList);
+  }
+});
+
+// Fetch after auth
+auth.onAuthStateChanged(user => {
+  if (user) {
+    fetchSessions();
+  } else {
+    window.location.href = "login.html";
+  }
+});
+
+
+</script>
+
+
+
+
+</body>
+</html>

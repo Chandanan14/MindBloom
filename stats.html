@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>stats</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="animations.css">
+    <link rel="stylesheet" href="responsive.css">
+    <script src="animations.js"></script>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <style>
+        
+     
+
+
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@500;700&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif; /* for main readable text */
+  scroll-behavior: smooth; 
+}
+
+
+
+
+
+
+    canvas {
+      max-width: 100%;
+    }
+
+
+     .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      
+
+      
+    }
+  
+
+
+
+    .overview-row{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      margin-top: 20px;
+    
+
+    }
+
+     .overview-box {
+      flex: 1;
+      min-width: 200px;
+      height: 100px;
+      background: #fcefe6;
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      margin-bottom:  15px;
+      margin-top: 0;
+      margin-left: 30px;
+      
+    }
+
+    .overview-box h3 {
+      margin: 5px 0;
+      font-size: 1.8rem;
+    }
+
+    .overview-box span {
+      font-size: 1rem;
+      color: #666;
+    }
+
+
+    .section-wrapper{
+      width: 1050px;
+      display: flex;
+      height: 300px;
+      gap: 20px;
+      align-items: stretch;
+      justify-content: center;
+      flex-direction: row;
+      margin: 20px 0px;
+
+    }
+
+
+     .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .card:hover{
+    transform:  scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+    }
+
+
+     .card h2 {
+      margin-top: 0;
+      font-size: 1.8rem;
+    }
+
+    .card p {
+      font-size:18px;
+      margin: 30px 0;
+    }
+
+    .small-text {
+      font-size: 15x;
+      color: #555;
+      margin-top: 10px;
+    }
+
+
+    .left-75{
+      width:600px;
+    }
+
+    .left-25{
+       width: 400px;
+
+    }
+
+    .breathe{
+      margin: 20px;
+      width: 1000px;
+    }
+
+
+    #heading{
+      font-size: 60px;
+      color: #000;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+   
+
+
+    </style>
+</head>
+<body>
+
+ 
+    <div class="sidebar">
+
+        <a href="index.html">
+            <div class="icon"><img src="assets/home.png"></div>
+            <span class="label">Home</span>
+        </a>
+        <a href="mood-log.html">
+            <div class="icon"><img src="assets/smiley.png"></div>
+            <span class="label">Mood log</span>
+        </a>
+        <a href="journal.html">
+            <div class="icon"><img src="assets/journal.png"></div>
+            <span class="label">Journal</span>
+        </a>
+        <a href="breathe.html">
+            <div class="icon"><img src="assets/breathe.png"></div>
+            <span class="label">Breathe</span>
+        </a>
+        <a href="stats.html">
+            <div class="icon"><img src="assets/stats.png"></div>
+            <span class="label">Stats</span>
+        </a>
+
+          <a href="#" id="settingsLink">
+            <div class="icon"><img src="assets/settings.png"></div>
+            <span class="label">settings</span>
+        </a>
+
+    </div>
+
+
+
+    <!-- SETTINGS MODAL -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+
+    <div class="profile-section">
+      <div id="current-pfp" class="current-pfp">😊</div>
+      <h2>User Details</h2>
+    </div>
+
+    <p>👤 <strong>Username:</strong> <span id="modal-username">Loading...</span></p>
+    <p>✉️ <strong>Email:</strong> <span id="modal-email">Loading...</span></p>
+
+    <!-- PFP chooser -->
+    <div id="pfp-chooser" class="pfp-selector" style="display:none;">
+      <h3>Choose your profile picture</h3>
+      <div class="pfp-options">
+        <span class="pfp-option">😊</span>
+        <span class="pfp-option">😎</span>
+        <span class="pfp-option">🌸</span>
+        <span class="pfp-option">🌼</span>
+        <span class="pfp-option">🐻</span>
+        <span class="pfp-option">🦋</span>
+      </div>
+    </div>
+
+    <!-- Change PFP button -->
+    <button id="change-pfp-btn">Change PFP</button>
+
+    <button id="modal-logout" class="logout-btn">Logout</button>
+  </div>
+</div>
+
+    <main>
+
+     <div class="main">
+     
+ 
+      <div class="container">
+
+
+
+     <h1 id="heading" class="anim-scroll"> overview </h1>
+
+
+  <!-- Overview Section -->
+  <div class="overview-row anim-scroll">
+    <div class="overview-box">
+      <h3 id="totalMood">0</h3>
+      <span>Total Mood Logs</span>
+    </div>
+    <div class="overview-box">
+      <h3 id="totalJournal">0</h3>
+      <span>Total Journal Entries</span>
+    </div>
+    <div class="overview-box">
+      <h3 id="totalBreathe">0</h3>
+      <span>Total Breathing Sessions</span>
+    </div>
+  </div>
+
+  <!-- Mood Section -->
+  <div class="section-wrapper anim-scroll">
+    <div class="left-75 card">
+      <h2>🧠 Mood Patterns</h2>
+      <p>Your mood chart helps visualize how your emotional balance shifts. Recognizing patterns can lead to better emotional awareness.</p>
+      <p>Try logging consistently for a complete reflection — even neutral or low moods provide helpful insight into your routine and triggers.</p>
+      <div class="small-text">Tip: Tag key events or reasons with your mood next time to discover emotional influences.</div>
+    </div>
+    <div class="right-25 card">
+      <canvas id="moodChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Journal Section -->
+  <div class="section-wrapper">
+    
+    <div class="right-25 card">
+      <canvas id="journalChart"></canvas>
+    </div>
+    <div class="left-75 card">
+      <h2>📓 Journaling Trends</h2>
+      <p>Journaling is a wonderful tool for reflection and growth. The number of entries written across days shows how often you take time to reflect.</p>
+      <p>Keep this habit going — even writing a few lines regularly can improve mental clarity and reduce stress.</p>
+      <div class="small-text">Fun idea: Try writing 1 gratitude sentence daily to boost your mood over time 🌻</div>
+    </div>
+  </div>
+
+  <!-- Breathing Summary -->
+  <div class="card breathe anim-scroll">
+    <h2>🌬️ Breathing Practice Summary</h2>
+    <p>Each mindful breath strengthens your focus and calms your system. Practicing even for a few minutes a day can improve your stress handling and emotional control.</p>
+    <div id="breatheInfo" class="small-text"></div>
+  </div>
+
+</div>
+     
+
+     </div>
+    </main>
+    <script type="module">
+import { protectPage } from "./authGuard.js";
+protectPage();
+</script>
+
+
+<!-- Include Chart.js UMD bundle first -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script type="module">
+import { auth, db, collection, doc, getDoc, getDocs, query, where } from "./firebase.js";
+
+
+
+
+
+// ====== SETTINGS MODAL ======
+const settingsLink = document.getElementById("settingsLink");
+const settingsModal = document.getElementById("settingsModal");
+const closeBtn = settingsModal.querySelector(".close-btn");
+const modalUsername = document.getElementById("modal-username");
+const modalEmail = document.getElementById("modal-email");
+const modalLogout = document.getElementById("modal-logout");
+const currentPfp = document.getElementById("current-pfp");
+const pfpOptions = document.querySelectorAll(".pfp-option");
+const pfpChooser = document.getElementById("pfp-chooser");
+const changePfpBtn = document.getElementById("change-pfp-btn");
+
+
+// Open/close modal
+settingsLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  settingsModal.style.display = "flex";
+});
+closeBtn.addEventListener("click", () => settingsModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === settingsModal) settingsModal.style.display = "none"; });
+
+// Logout
+modalLogout.addEventListener("click", () => {
+  auth.signOut().then(() => window.location.href = "login.html");
+});
+
+
+
+// Elements
+const totalMoodEl = document.getElementById("totalMood");
+const totalJournalEl = document.getElementById("totalJournal");
+const totalBreatheEl = document.getElementById("totalBreathe");
+const breatheInfo = document.getElementById("breatheInfo");
+const moodChartCanvas = document.getElementById("moodChart");
+const journalChartCanvas = document.getElementById("journalChart");
+
+async function fetchStats() {
+  const user = auth.currentUser;
+  if (!user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  const uid = user.uid;
+
+  // ===== 1️⃣ Fetch Mood Logs (single doc with array) =====
+  const moodDocSnap = await getDoc(doc(db, "moodLogs", uid));
+  const moodLog = moodDocSnap.exists() ? moodDocSnap.data().logs : [];
+  console.log("Mood Log:", moodLog);
+
+  // ===== 2️⃣ Fetch Journal Entries (top-level docs with userId) =====
+  const journalSnap = await getDocs(query(collection(db, "journalEntries"), where("userId", "==", uid)));
+  const journalEntries = journalSnap.docs.map(doc => ({
+    id: doc.id,
+    content: doc.data().content,
+    date: doc.data().date,
+    time: doc.data().time
+  }));
+  console.log("Journal Entries:", journalEntries);
+
+  // ===== 3️⃣ Fetch Breathing Sessions (subcollection) =====
+  const breatheSnap = await getDocs(collection(db, "breathSessions", uid, "sessions"));
+  const breathSessions = breatheSnap.docs.map(doc => doc.data());
+  console.log("Breath Sessions:", breathSessions);
+
+  // ===== 4️⃣ Overview Totals =====
+  totalMoodEl.textContent = moodLog.length;
+  totalJournalEl.textContent = journalEntries.length;
+  totalBreatheEl.textContent = breathSessions.length;
+
+  // ===== 5️⃣ Mood Pie Chart =====
+  const allMoods = ["happiness", "focus", "tiredness", "neutral", "numbness"];
+  const moodColors = {
+    happiness: '#ffcc80',
+    focus: '#80deea',
+    tiredness: '#bcaaa4',
+    neutral: '#cfd8dc',
+    numbness: '#a1887f',
+  };
+  const moodCounts = {};
+  allMoods.forEach(m => moodCounts[m] = 0);
+
+  moodLog.forEach(entry => {
+    if (entry.mood && allMoods.includes(entry.mood)) moodCounts[entry.mood]++;
+  });
+
+  new Chart(moodChartCanvas, {
+    type: 'pie',
+    data: {
+      labels: allMoods,
+      datasets: [{
+        data: allMoods.map(m => moodCounts[m]),
+        backgroundColor: allMoods.map(m => moodColors[m])
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+
+  // ===== 6️⃣ Journal Bar Chart =====
+  const journalData = {};
+  journalEntries.forEach(d => {
+    if (d.date) journalData[d.date] = (journalData[d.date] || 0) + 1;
+  });
+
+  new Chart(journalChartCanvas, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(journalData),
+      datasets: [{
+        label: "Entries per Day",
+        data: Object.values(journalData),
+        backgroundColor: '#a5d6a7'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { ticks: { autoSkip: true, maxTicksLimit: 5 } },
+        y: { beginAtZero: true }
+      }
+    }
+  });
+
+  // ===== 7️⃣ Breathing Summary =====
+  const totalMinutes = breathSessions.reduce((acc, s) => {
+    const mins = parseInt(s.duration);
+    return acc + (isNaN(mins) ? 0 : mins);
+  }, 0);
+
+  breatheInfo.textContent = `You’ve completed ${breathSessions.length} total sessions with a combined duration of around ${totalMinutes} minutes of mindful breathing. Keep it going — even 5 minutes daily makes a difference! 🌱`;
+}
+
+auth.onAuthStateChanged(user => {
+  if (user) fetchStats();
+});
+
+</script>
+
+
+
+
+<script type="module" src="./settings.js"></script>
+
+</body>
+</html>

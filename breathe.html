@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="animations.css">
+    <script src="animations.js"></script>
+    <link rel="stylesheet" href="responsive.css">
+  <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+
+    <!-- Lottie animation script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.0/lottie.min.js"></script>
+
+<!-- Confetti animation script -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <title>breathing exercise</title>
+
+    <link rel="stylesheet" href="sidebar.css">
+    <style>
+    
+
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@500;700&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif; /* for main readable text */
+}
+
+
+
+    
+
+
+
+
+         #heading {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    #animation {
+      width: 300px;
+      height: 300px;
+      margin-bottom: 20px;
+    }
+
+    #breathText,
+    #timeLeft,
+    #completeMessage {
+      font-size: 1.5rem;
+      margin: 5px 0;
+      min-height: 30px;
+      text-align: center;
+    }
+
+    #completeMessage {
+      color: #4caf50;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    main button,
+    select {
+      padding: 10px 15px;
+      border: none;
+      background-color: #a8edea;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    main button:hover,
+    select:hover {
+      background-color: #90d7d4;
+    }
+
+   
+
+    audio {
+      display: none;
+    }
+
+    #musicToggle {
+      position: absolute;
+      top: 40px;
+      right: 140px;
+      background-color: #a8edea;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      font-size: 1.5rem;
+      text-align: center;
+      line-height: 45px;
+      cursor: pointer;
+      
+      
+    }
+
+    #musicToggle:hover {
+      background-color: #90d7d4;
+      transform:  scale(1.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+    }
+
+
+    .breathing-section {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+
+
+#breathe-entries{
+    position: fixed;
+    width: 55px;
+    background-color: #aa96fc;
+    border-radius: 50%;
+    padding: 5px;
+    top:30px;
+    left: 1150px;
+}
+
+#breathe-entries:hover{
+   transform:  scale(1.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+  background-color: #937bf7;
+}
+       
+
+       
+       
+    </style>
+</head>
+<body>
+
+    
+    
+    <div class="sidebar">
+
+        <a href="index.html">
+            <div class="icon"><img src="assets/home.png"></div>
+            <span class="label">Home</span>
+        </a>
+        <a href="mood-log.html">
+            <div class="icon"><img src="assets/smiley.png"></div>
+            <span class="label">Mood log</span>
+        </a>
+        <a href="journal.html">
+            <div class="icon"><img src="assets/journal.png"></div>
+            <span class="label">Journal</span>
+        </a>
+        <a href="breathe.html">
+            <div class="icon"><img src="assets/breathe.png"></div>
+            <span class="label">Breathe</span>
+        </a>
+        <a href="stats.html">
+            <div class="icon"><img src="assets/stats.png"></div>
+            <span class="label">Stats</span>
+        </a>
+
+          <a href="#" id="settingsLink">
+            <div class="icon"><img src="assets/settings.png"></div>
+            <span class="label">settings</span>
+        </a>
+
+    </div>
+
+
+    <!-- SETTINGS MODAL -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+
+    <div class="profile-section">
+      <div id="current-pfp" class="current-pfp">😊</div>
+      <h2>User Details</h2>
+    </div>
+
+    <p>👤 <strong>Username:</strong> <span id="modal-username">Loading...</span></p>
+    <p>✉️ <strong>Email:</strong> <span id="modal-email">Loading...</span></p>
+
+    <!-- PFP chooser -->
+    <div id="pfp-chooser" class="pfp-selector" style="display:none;">
+      <h3>Choose your profile picture</h3>
+      <div class="pfp-options">
+        <span class="pfp-option">😊</span>
+        <span class="pfp-option">😎</span>
+        <span class="pfp-option">🌸</span>
+        <span class="pfp-option">🌼</span>
+        <span class="pfp-option">🐻</span>
+        <span class="pfp-option">🦋</span>
+      </div>
+    </div>
+
+    <!-- Change PFP button -->
+    <button id="change-pfp-btn">Change PFP</button>
+
+    <button id="modal-logout" class="logout-btn">Logout</button>
+  </div>
+</div>
+
+     <main>
+
+     <div class="main">
+
+       
+
+
+      
+      <a href="breathe-entries.html" id="entries-link">
+           <img src="assets/breathe-entries.png" id="breathe-entries">
+         </a>
+
+
+
+     <div class="breathing-section">
+
+             <div id="musicToggle" onclick="toggleSound()" title="Toggle Sound">🎵</div>
+
+  <h1 id="heading" class="anim-scroll">Let’s take a mindful breath 🌿</h1>
+
+  <div id="animation" class="anim-scroll"></div>
+
+  <div id="breathText" class="anim-scroll">Ready?</div>
+  <div id="timeLeft" class="anim-scroll">Time left: 0:00</div>
+  <div id="completeMessage"></div>
+
+  <div class="controls anim-scroll">
+    <select id="durationSelect">
+      <option value="1">1 min</option>
+      <option value="2">2 min</option>
+      <option value="3">3 min</option>
+    </select>
+
+    <button id="toggleBtn">▶ Start</button>
+    <button id="resumeBtn" style="display:none;">🔁 Resume</button>
+  </div>
+
+  <audio id="bgAudio" loop>
+    <source src="assets/audio/breathing.mp3" type="audio/mpeg">
+  </audio>
+
+
+
+
+
+     </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+     </div>
+
+    </main>
+    <script type="module">
+import { protectPage } from "./authGuard.js";
+protectPage();
+</script>
+
+
+
+
+   
+
+    <script  type="module">
+
+
+import { auth , db , doc, collection, addDoc, serverTimestamp } from "./firebase.js";
+
+
+
+
+
+// ====== SETTINGS MODAL ======
+const settingsLink = document.getElementById("settingsLink");
+const settingsModal = document.getElementById("settingsModal");
+const closeBtn = settingsModal.querySelector(".close-btn");
+const modalUsername = document.getElementById("modal-username");
+const modalEmail = document.getElementById("modal-email");
+const modalLogout = document.getElementById("modal-logout");
+const currentPfp = document.getElementById("current-pfp");
+const pfpOptions = document.querySelectorAll(".pfp-option");
+const pfpChooser = document.getElementById("pfp-chooser");
+const changePfpBtn = document.getElementById("change-pfp-btn");
+
+
+// Open/close modal
+settingsLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  settingsModal.style.display = "flex";
+});
+closeBtn.addEventListener("click", () => settingsModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === settingsModal) settingsModal.style.display = "none"; });
+
+// Logout
+modalLogout.addEventListener("click", () => {
+  auth.signOut().then(() => window.location.href = "login.html");
+});
+
+
+
+
+     
+
+
+
+    const animationContainer = document.getElementById("animation");
+    const breathText = document.getElementById("breathText");
+    const timeLeftText = document.getElementById("timeLeft");
+    const completeMessage = document.getElementById("completeMessage");
+    const audio = document.getElementById("bgAudio");
+    const durationSelect = document.getElementById("durationSelect");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const resumeBtn = document.getElementById("resumeBtn");
+
+    const phases = [
+      { text: "Inhale...", duration: 4000, direction: 1 },
+      { text: "Hold...", duration: 4000, direction: 0 },
+      { text: "Exhale...", duration: 4000, direction: -1 },
+      { text: "Hold...", duration: 4000, direction: 0 }
+    ];
+
+    let anim = lottie.loadAnimation({
+      container: animationContainer,
+      renderer: 'svg',
+      loop: false,
+      autoplay: false,
+      path: './Breathing.json'
+    });
+
+    let totalTime = 0;
+    let timeLeft = 0;
+    let breathingInterval;
+    let countdownInterval;
+    let currentPhase = 0;
+    let isRunning = false;
+
+    function formatTime(ms) {
+      const sec = Math.max(0, Math.ceil(ms / 1000));
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimeDisplay() {
+      timeLeftText.textContent = "Time left: " + formatTime(timeLeft);
+    }
+
+    function showCompletion() {
+      breathText.textContent = "";
+      completeMessage.textContent = "🎉 Great job! You finished your session.";
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      const selectedDuration = parseInt(durationSelect.value);
+      saveSession(selectedDuration);
+    }
+
+    function runBreathingCycle() {
+      if (timeLeft <= 0) {
+        stopBreathing(true);
+        return;
+      }
+
+      const phase = phases[currentPhase];
+      breathText.textContent = phase.text;
+
+      if (phase.direction === 1) {
+        anim.setDirection(1);
+        anim.play();
+      } else if (phase.direction === -1) {
+        anim.setDirection(-1);
+        anim.play();
+      } else {
+        anim.pause();
+      }
+
+      currentPhase = (currentPhase + 1) % phases.length;
+      breathingInterval = setTimeout(runBreathingCycle, phase.duration);
+    }
+
+    function startBreathing() {
+      clearTimeout(breathingInterval);
+      clearInterval(countdownInterval);
+      currentPhase = 0;
+      totalTime = parseInt(durationSelect.value) * 60 * 1000;
+      timeLeft = totalTime;
+      updateTimeDisplay();
+      runBreathingCycle();
+      anim.goToAndPlay(0, true);
+      audio.play();
+      isRunning = true;
+      completeMessage.textContent = "";
+      toggleBtn.textContent = "⏹ Stop";
+      resumeBtn.style.display = "none";
+
+      countdownInterval = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft -= 1000;
+          updateTimeDisplay();
+        }
+      }, 1000);
+    }
+
+    function stopBreathing(isCompleted = false) {
+      clearTimeout(breathingInterval);
+      clearInterval(countdownInterval);
+      anim.pause();
+      audio.pause();
+      isRunning = false;
+      toggleBtn.textContent = "▶ Start";
+      resumeBtn.style.display = timeLeft > 0 ? "inline" : "none";
+      if (isCompleted) {
+        showCompletion();
+        timeLeftText.textContent = "Time left: 0:00";
+      }
+    }
+
+    function resumeBreathing() {
+      if (timeLeft > 0 && !isRunning) {
+        runBreathingCycle();
+        anim.play();
+        audio.play();
+        isRunning = true;
+        toggleBtn.textContent = "⏹ Stop";
+        resumeBtn.style.display = "none";
+
+        countdownInterval = setInterval(() => {
+          if (timeLeft > 0) {
+            timeLeft -= 1000;
+            updateTimeDisplay();
+          }
+        }, 1000);
+      }
+      
+    }
+
+    function toggleBreathing() {
+      if (isRunning) {
+        stopBreathing(false);
+      } else {
+        startBreathing();
+      }
+     
+
+    }
+
+    function toggleSound() {
+      const icon = document.getElementById("musicToggle");
+      if (audio.paused) {
+        audio.play();
+        icon.textContent = "🎵";
+      } else {
+        audio.pause();
+        icon.textContent = "🔇";
+      }
+      function toggleSound() {
+  if (audio.paused) {
+    audio.play();
+  } else {
+    audio.pause();
+  }
+}
+    }
+
+
+    function updateMusicIcon() {
+  const icon = document.getElementById("musicToggle");
+  icon.textContent = audio.paused ? "🔇" : "🎵";
+}
+
+
+    async function saveSession(durationMinutes) {
+  try {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    // Reference to user's subcollection in breathSessions
+    const userSessionsRef = collection(db, "breathSessions", user.uid, "sessions");
+
+    await addDoc(userSessionsRef, {
+      duration: `${durationMinutes} min`,
+      createdAt: serverTimestamp()
+    });
+
+    console.log("✅ Breath session saved to Firebase");
+  } catch (err) {
+    console.error("Error saving breath session:", err);
+  }
+}
+  
+    toggleBtn.addEventListener("click", toggleBreathing);
+    resumeBtn.addEventListener("click", resumeBreathing);
+   
+    
+    
+
+
+    </script>
+<script type="module" src="./settings.js"></script>
+
+</body>
+</html>

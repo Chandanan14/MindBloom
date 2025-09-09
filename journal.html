@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>journal</title>
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="animations.css">
+    <script src="animations.js"></script>
+    <link rel="stylesheet" href="responsive.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    
+    <style>
+
+    
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Quicksand:wght@500;700&display=swap');
+
+body {
+  font-family: 'Nunito', sans-serif; /* for main readable text */
+}
+
+
+
+.main{
+  position: relative;
+}
+
+
+#diary-write{
+    width: 200px;
+    position: absolute;
+    top: 65%;
+    left: 80%;
+}
+
+.save-button{
+    position: absolute;
+    top: 85%;
+    left: 43%;
+    padding: 10px 30px;
+    font-size: 30px;
+    border-radius: 50px;
+    background-color: #7af3ad;
+    border: 1px solid black;
+}  
+
+.save-button:hover{
+    background-color: #4cdb88;
+  border: 4px double black;
+   transform:  scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+  
+}
+
+
+#pen-icon{
+    position: fixed;
+    width: 50px;
+    background-color: #7af3ad;
+    border: 1px solid black;
+    border-radius: 50%;
+    padding: 5px;
+    top:30px;
+    left: 1170px;
+}
+
+
+#pen-icon:hover{
+  background-color: #55e892;
+  border: 3px double black;
+   transform:  scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+}
+
+
+
+
+
+
+
+
+
+  .diary-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      height: 400px;
+      width: 800px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .date-display,.date-value{
+      font-size: 16px;
+      color: #101010;
+      font-weight: bold;
+      position: absolute;
+      top: 14%;
+      left: 15%;
+
+    }
+
+    .time-display,.time-value {
+      font-size: 16px;
+      color: #101010;
+      font-weight: bold;
+      position: absolute;
+      top: 14%;
+      left: 73%;
+
+    }
+
+    .diary-textarea {
+      width: 100%;
+      height: 300px;
+      margin-top: 70px;
+      padding: 6px 15px 15px;
+      font-size: 16px;
+      line-height: 30px;
+      font-family: 'Courier New', monospace;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: vertical;
+      
+      /* ✅ Lined background */
+      background: linear-gradient(#ffffff 29px, #e8e8e8 30px);
+      background-size: 100% 30px;
+
+      box-sizing: border-box;
+    }
+
+    .diary-textarea:focus {
+      outline: none;
+      border-color: #000000;
+      box-shadow: 0 0 5px #aaa;
+    }
+
+    .format{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        
+    }
+
+    
+
+    #bold{
+        font-weight: bold;
+        position: absolute;
+        font-size: 30px;
+        top: 110px;
+        left: 180px;
+        cursor: pointer;
+        background-color: #ffffff;
+        padding: 5px 10px;
+    }
+
+    #italic{
+        font-style: italic;
+        position: absolute;
+        font-size: 30px;
+        top: 110px;
+        left: 250px;
+        cursor: pointer;
+        background-color: #ffffff;
+        padding: 5px 10px;
+    }
+
+    .format button{
+        position: absolute;
+        padding: 15px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+    }
+
+    .format button:hover{
+       transform:  scale(1.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  animation: bounce 0.3s ease;
+    }
+
+    #red{
+        background-color: #e16565;
+        top: 120px;
+        left: 300px;
+    }
+
+     #yellow{
+        background-color: #ebd56a	;
+        top: 120px;
+        left: 360px;
+    }
+
+     #green{
+        background-color: #94f072;
+        top: 120px;
+        left: 420px;
+    }
+
+     #blue{
+        background-color: #73b2e9;
+        top: 120px;
+        left: 480px;
+    }
+
+     #pink{
+        background-color: #e475b4;
+        top: 120px;
+        left: 540px;
+    }
+
+    .active-format {
+   outline: 3px solid black;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  transform: scale(1.1);
+  
+   }
+
+   .format button {
+  position: absolute;
+  padding: 15px;
+  border: 2px solid transparent; 
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+}
+
+
+
+
+       
+    </style>
+</head>
+<body>
+
+    
+    
+    <div class="sidebar">
+
+        <a href="index.html">
+            <div class="icon"><img src="assets/home.png"></div>
+            <span class="label">Home</span>
+        </a>
+        <a href="mood-log.html">
+            <div class="icon"><img src="assets/smiley.png"></div>
+            <span class="label">Mood log</span>
+        </a>
+        <a href="journal.html">
+            <div class="icon"><img src="assets/journal.png"></div>
+            <span class="label">Journal</span>
+        </a>
+        <a href="breathe.html">
+            <div class="icon"><img src="assets/breathe.png"></div>
+            <span class="label">Breathe</span>
+        </a>
+        <a href="stats.html">
+            <div class="icon"><img src="assets/stats.png"></div>
+            <span class="label">Stats</span>
+        </a>
+
+          <a href="#" id="settingsLink">
+            <div class="icon"><img src="assets/settings.png"></div>
+            <span class="label">settings</span>
+        </a>
+
+    </div>
+
+
+
+    <!-- SETTINGS MODAL -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+
+    <div class="profile-section">
+      <div id="current-pfp" class="current-pfp">😊</div>
+      <h2>User Details</h2>
+    </div>
+
+    <p>👤 <strong>Username:</strong> <span id="modal-username">Loading...</span></p>
+    <p>✉️ <strong>Email:</strong> <span id="modal-email">Loading...</span></p>
+
+    <!-- PFP chooser -->
+    <div id="pfp-chooser" class="pfp-selector" style="display:none;">
+      <h3>Choose your profile picture</h3>
+      <div class="pfp-options">
+        <span class="pfp-option">😊</span>
+        <span class="pfp-option">😎</span>
+        <span class="pfp-option">🌸</span>
+        <span class="pfp-option">🌼</span>
+        <span class="pfp-option">🐻</span>
+        <span class="pfp-option">🦋</span>
+      </div>
+    </div>
+
+    <!-- Change PFP button -->
+    <button id="change-pfp-btn">Change PFP</button>
+
+    <button id="modal-logout" class="logout-btn">Logout</button>
+  </div>
+</div>
+
+
+     <main>
+
+     <div class="main">
+  
+        <div class="diary-container">
+    <div class="date-display" id="dateTime"></div>
+    <div class="diary-textarea" contenteditable="true">Dear Diary...</div>
+
+  </div>
+ 
+
+   <h1 class="date-display">DATE: <span id="date-value"></span></h1>
+   <h1 class="time-display">TIME: <span id="time-value"></span></h1>
+
+
+
+    <div class="format">
+        
+         <button id="bold">B</button>
+         <button id="italic">I</button>
+
+         <button id="red"></button>
+         <button id="yellow"></button>
+         <button id="green"></button>
+         <button id="blue"></button>
+         <button id="pink"></button>
+
+
+    </div>
+
+         <a href="entries.html" id="entries-link">
+           <img src="assets/pen.png" id="pen-icon">
+         </a>
+        
+         <button class="save-button">Save</button>
+         <img src="assets/diary-write.png" id="diary-write">
+        
+       
+     
+
+    </main>
+    <script type="module">
+import { protectPage } from "./authGuard.js";
+protectPage();
+</script>
+<script src="settings.js"></script>
+
+
+   
+
+    <script type="module">
+
+
+import { db, auth,collection, addDoc, getDoc, getDocs, doc, updateDoc, serverTimestamp } 
+  from "./firebase.js";
+
+
+
+    
+
+// ====== SETTINGS MODAL ======
+const settingsLink = document.getElementById("settingsLink");
+const settingsModal = document.getElementById("settingsModal");
+const closeBtn = settingsModal.querySelector(".close-btn");
+const modalUsername = document.getElementById("modal-username");
+const modalEmail = document.getElementById("modal-email");
+const modalLogout = document.getElementById("modal-logout");
+const currentPfp = document.getElementById("current-pfp");
+const pfpOptions = document.querySelectorAll(".pfp-option");
+const pfpChooser = document.getElementById("pfp-chooser");
+const changePfpBtn = document.getElementById("change-pfp-btn");
+
+
+// Open/close modal
+settingsLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  settingsModal.style.display = "flex";
+});
+closeBtn.addEventListener("click", () => settingsModal.style.display = "none");
+window.addEventListener("click", (e) => { if(e.target === settingsModal) settingsModal.style.display = "none"; });
+
+// Logout
+modalLogout.addEventListener("click", () => {
+  auth.signOut().then(() => window.location.href = "login.html");
+});
+
+
+
+    function updateClock() {
+  const now = new Date();
+ document.getElementById('date-value').textContent = now.toLocaleDateString();
+document.getElementById('time-value').textContent = now.toLocaleTimeString();
+    }
+
+  updateClock(); 
+  setInterval(updateClock, 1000); // Update every second
+
+
+//formatting 
+
+
+  const editor = document.querySelector(".diary-textarea");
+  const boldBtn = document.getElementById("bold");
+  const italicBtn = document.getElementById("italic");
+
+  const colorBtns = document.querySelectorAll(
+    ".format button:not(#bold):not(#italic)"
+  );
+
+  // Bold
+  boldBtn.addEventListener("click", () => {
+    document.execCommand("bold");
+    editor.focus();
+    updateState();
+  });
+
+  // Italic
+  italicBtn.addEventListener("click", () => {
+    document.execCommand("italic");
+    editor.focus();
+    updateState();
+  });
+
+  // Text Color
+  colorBtns.forEach((btn) => {
+    btn.addEventListener("mousedown", (e) => {
+      e.preventDefault(); // prevent losing focus
+      const btnColor = normalizeColor(getComputedStyle(btn).backgroundColor);
+      const currentColor = normalizeColor(document.queryCommandValue("foreColor"));
+
+      if (btnColor === currentColor) {
+        document.execCommand("foreColor", false, "#000000");
+      } else {
+        document.execCommand("foreColor", false, btnColor);
+      }
+
+      editor.focus();
+      updateState();
+    });
+  });
+
+  function normalizeColor(color) {
+    const ctx = document.createElement("canvas").getContext("2d");
+    ctx.fillStyle = color;
+    return ctx.fillStyle.toLowerCase();
+  }
+
+  function updateState() {
+    requestAnimationFrame(() => {
+      boldBtn.classList.toggle("active-format", document.queryCommandState("bold"));
+      italicBtn.classList.toggle("active-format", document.queryCommandState("italic"));
+
+      const currentColor = normalizeColor(document.queryCommandValue("foreColor"));
+      let matched = false;
+
+      colorBtns.forEach((btn) => {
+        const btnColor = normalizeColor(getComputedStyle(btn).backgroundColor);
+        const isActive = currentColor === btnColor;
+        btn.classList.toggle("active-format", isActive);
+        if (isActive) matched = true;
+      });
+
+      if (!matched) {
+        colorBtns.forEach((btn) => btn.classList.remove("active-format"));
+      }
+    });
+  }
+
+  ["keyup", "mouseup", "input"].forEach((evt) =>
+    editor.addEventListener(evt, updateState)
+  );
+
+  document.addEventListener("selectionchange", () => {
+    if (document.activeElement === editor) updateState();
+  });
+
+
+
+
+  const saveButton = document.querySelector(".save-button");
+
+saveButton.addEventListener("click", async () => {
+  const content = editor.innerHTML;
+  const now = new Date();
+
+  try {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("Please log in to save your entry.");
+      return;
+    }
+
+    // ✅ Top-level "journalEntries" collection (NOT nested inside "users")
+    await addDoc(collection(db, "journalEntries"), {
+      userId: user.uid,                             // link entry to user
+      content: content,                             // diary content
+      date: now.toISOString().split("T")[0],        // YYYY-MM-DD
+      time: now.toLocaleTimeString(),               // local time
+      timestamp: serverTimestamp()                  // Firestore server time
+    });
+
+    alert("Diary entry saved!");
+
+    const another = confirm("Do you want to write another entry for today?");
+    if (!another) {
+      editor.innerHTML = "";
+    }
+  } catch (err) {
+    console.error("Error saving entry: ", err);
+    alert("Failed to save entry. Try again.");
+  }
+});
+
+
+
+
+
+
+   
+
+
+    </script>
+
+<script type="module" src="./settings.js"></script>
+
+</body>
+</html>

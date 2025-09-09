@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="auth-container">
+    <h2>Welcome Back</h2>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button id="loginBtn">Login</button>
+    <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+     <img src="assets/sun.png" id="logo">
+     <h3 id="logo-txt">MindBloom</h3>
+</div>
+
+<script type="module">
+import { auth } from "./firebase.js"; // Your firebase.js path
+import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+
+document.getElementById("loginBtn").addEventListener("click", async () => {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+        alert("Please enter email and password");
+        return;
+    }
+
+    try {
+        const userCred = await signInWithEmailAndPassword(auth, email, password);
+        if (!userCred.user.emailVerified) {
+            alert("Please verify your email before logging in.");
+            return;
+        }
+
+        alert("Login successful!");
+        window.location.href = "index.html";
+
+    } catch (error) {
+        // Handle errors specifically
+        switch(error.code){
+            case "auth/user-not-found":
+            case "auth/wrong-password":
+                alert("Email or password incorrect.");
+                break;
+            case "auth/invalid-email":
+                alert("Please enter a valid email.");
+                break;
+            case "auth/network-request-failed":
+                alert("Network error. Please check your internet connection.");
+                break;
+            default:
+                alert(error.message);
+        }
+    }
+});
+</script>
+</body>
+</html>
